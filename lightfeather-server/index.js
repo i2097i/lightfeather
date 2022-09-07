@@ -1,8 +1,14 @@
 const express = require('express');
 const request = require('request');
+var cors = require('cors')
 
 const app = new express();
 app.use(express.json());
+
+var corsOptions = {
+  origin: '*',//'http://localhost:3000',
+  optionsSuccessStatus: 200
+}
 
 const SUPERVISOR_ENDPOINT = 'https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers';
 var supervisors = [];
@@ -73,7 +79,7 @@ const validate = (form) => {
 };
 
 // GET /api/supervisors
-app.get('/api/supervisors', async (req, res) => {
+app.get('/api/supervisors', cors(corsOptions), async (req, res) => {
   // Use cached supervisor list if present
   if (supervisors.length > 0) {
       // TODO: Handle cache invalidation
@@ -91,16 +97,16 @@ app.get('/api/supervisors', async (req, res) => {
 });
 
 // POST /api/submit
-app.post('/api/submit', async (req, res) => {
+app.post('/api/submit', cors(corsOptions), async (req, res) => {
   var form = req.body;
   const errors = validate(form);
-
+  console.error("here");
   if (errors.length > 0) {
-    res.status(400);
+    // res.status(400);
   } else {
     // If successful, log body to express console
     console.log(req.body);
-    res.status(204);
+    // res.status(204);
   }
 
   res.json({errors: errors});
