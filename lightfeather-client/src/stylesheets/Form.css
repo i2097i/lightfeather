@@ -1,0 +1,47 @@
+.form-group {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 25px;
+}
+
+.form-field label {
+  margin: 10px 0;
+}
+
+.check-group {
+  position: relative;
+}
+
+.check-group input {
+  position: absolute;
+  bottom: 0;
+}
+
+.check-group div {
+  margin-left: 22px;
+  margin-bottom: 10px;
+}
+
+.check-label {
+  margin-left: 30px;
+}
+
+input {
+  height: 33px;
+  border: solid lightgray 1px;
+  border-radius: 4px;
+}
+input[type=submit] {
+  /*border: none;*/
+}
+
+.supervisors {
+  width: 300px;
+  margin: 25px auto;
+}

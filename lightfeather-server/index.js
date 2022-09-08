@@ -4,11 +4,7 @@ var cors = require('cors')
 
 const app = new express();
 app.use(express.json());
-
-var corsOptions = {
-  origin: '*',//'http://localhost:3000',
-  optionsSuccessStatus: 200
-}
+app.use(cors({origin: 'http://localhost:3000'}));
 
 const SUPERVISOR_ENDPOINT = 'https://o3m5qixdng.execute-api.us-east-1.amazonaws.com/api/managers';
 var supervisors = [];
@@ -51,7 +47,7 @@ const validate = (form) => {
 
     // Validate required fields
     if (REQUIRED_FIELDS.includes(key)) {
-      var isValid = commonValidation(value) && !value.match(digitRegex);
+      var isValid = commonValidation(value) && (key === 'supervisor' || !value.match(digitRegex));
 
       if (!isValid) {
         errors.push(`${key} is invalid`);
@@ -79,7 +75,7 @@ const validate = (form) => {
 };
 
 // GET /api/supervisors
-app.get('/api/supervisors', cors(corsOptions), async (req, res) => {
+app.get('/api/supervisors', async (req, res) => {
   // Use cached supervisor list if present
   if (supervisors.length > 0) {
       // TODO: Handle cache invalidation
@@ -97,17 +93,12 @@ app.get('/api/supervisors', cors(corsOptions), async (req, res) => {
 });
 
 // POST /api/submit
-app.post('/api/submit', cors(corsOptions), async (req, res) => {
+app.post('/api/submit', async (req, res) => {
   var form = req.body;
   const errors = validate(form);
-  console.error("here");
-  if (errors.length > 0) {
-    // res.status(400);
-  } else {
-    // If successful, log body to express console
-    console.log(req.body);
-    // res.status(204);
-  }
+
+  // If successful, log body to express console
+  console.log(req.body);
 
   res.json({errors: errors});
 });
